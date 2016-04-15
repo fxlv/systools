@@ -127,6 +127,11 @@ function install_tcpdump {
 }
 
 
+if [ ! -x /sbin/ip ]; then
+    die "/sbin/ip not available, unsupported system"
+fi
+
+
 if [ -x /usr/sbin/tcpdump ]; then
     tcpdump=/usr/sbin/tcpdump
 else
