@@ -19,7 +19,7 @@ capture_file_provided=0
 write_to_file=0
 
 function die {
-    echo $@
+    echo "$@"
     exit 1
 
 }
@@ -38,12 +38,12 @@ function capture {
     capture_file=$(get_capture_file_name)
     echo "Starting packet capture on interface $INTERFACE"
     echo "Capturing $PACKET_COUNT packets"
-    sudo $tcpdump -i $INTERFACE -s0 -c $PACKET_COUNT -w $capture_file
+    sudo "$tcpdump" -i "$INTERFACE" -s0 -c "$PACKET_COUNT" -w "$capture_file"
     echo "Captured data saved to $capture_file"
 }
 
 function get_last_capture_file {
-    ls -lasht capture_$HOSTNAME_*.pcap|head -1|cut -d " " -f 10
+    ls -lasht capture_"$HOSTNAME"_*.pcap|head -1|cut -d " " -f 10
 }
 
 function get_my_ip {
@@ -51,7 +51,7 @@ function get_my_ip {
 }
 
 function debugprint {
-    (( DEBUG )) && echo $@
+    (( DEBUG )) && echo "$@"
 }
 
 function top_sources {
@@ -69,8 +69,8 @@ function top_sources {
 
 function capture_grep {
     (( capture_file_provided )) && last_capture_file=$capture_file_name || last_capture_file=$(get_last_capture_file)
-    if [ -e $last_capture_file ]; then
-        capture_ip=$(echo $last_capture_file|cut -d "_" -f 4)
+    if [ -e "$last_capture_file" ]; then
+        capture_ip=$(echo "$last_capture_file"|cut -d "_" -f 4)
         debugprint "My ip: $(get_my_ip)"
         debugprint "Capture ip: $capture_ip"
         echo "Grepping capture file $last_capture_file for host $grep_host"
@@ -80,7 +80,7 @@ function capture_grep {
         else
             additional_arguments_to_tcpdump=" "
         fi
-        sudo $tcpdump -tnr $last_capture_file host $grep_host -c $PACKET_COUNT $additional_arguments_to_tcpdump 2> /dev/null
+        sudo "$tcpdump" -tnr "$last_capture_file" host "$grep_host" -c "$PACKET_COUNT" "$additional_arguments_to_tcpdump" 2> /dev/null
 	(( write_to_file )) && echo "Rsults written to $result_file"
     else
         die "Capture file $last_capture_file does not exist"
@@ -145,7 +145,7 @@ else
     done
 fi
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
     usage
 fi
 
