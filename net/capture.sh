@@ -56,12 +56,12 @@ function debugprint {
 
 function top_sources {
     (( capture_file_provided )) && last_capture_file=$capture_file_name || last_capture_file=$(get_last_capture_file)
-    if [ -e $last_capture_file ]; then
+    if [ -e "$last_capture_file" ]; then
         capture_ip=$(echo $last_capture_file|cut -d "_" -f 4)
         debugprint "My ip: $(get_my_ip)"
         debugprint "Capture ip: $capture_ip"
         echo "Thses are the top 10 packet sources"
-        sudo $tcpdump -tnr $last_capture_file 2> /dev/null | awk -F '.' '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -n |grep -v $capture_ip | tail -n 10
+        sudo "$tcpdump" -tnr "$last_capture_file" 2> /dev/null | awk -F '.' '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -n |grep -v $capture_ip | tail -n 10
     else
         die "Capture file $last_capture_file does not exist"
     fi
