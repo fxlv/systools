@@ -26,8 +26,11 @@ def parse_args():
     "Parse arguments"
     parser = argparse.ArgumentParser(description="Watchdog")
     parser.add_argument("-t", required=True, action="append", help="Target")
-    parser.add_argument("-a", action="store", choices=["print", "reboot"],
-                        default="print", help="Action")
+    parser.add_argument("-a",
+                        action="store",
+                        choices=["print", "reboot"],
+                        default="print",
+                        help="Action")
     parser.add_argument("-d", action="store_true", help="Debug mode")
     return parser.parse_args()
 
@@ -79,8 +82,9 @@ def ping(target, count):
     if not os.path.exists(ping_binary):
         die("Cannot find the ping binary")
     # construct the ping commandline, set timeout to 1 second
-    command = "{binary} -W 1 -c {count} {target}".format(
-        binary=ping_binary, count=count, target=target)
+    command = "{binary} -W 1 -c {count} {target}".format(binary=ping_binary,
+                                                         count=count,
+                                                         target=target)
     if DEBUG:
         print "Executing the following ping command"
         print command
@@ -124,7 +128,7 @@ def main():
                 sys.exit(0)
         else:
             # sleep if the max retry count has not been reached yet
-            if not (i+1) == max_retry_times:
+            if not (i + 1) == max_retry_times:
                 sleep()
     else:
         # if all the pings have failed, take the action
